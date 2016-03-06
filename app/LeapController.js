@@ -1,8 +1,19 @@
 import Leap from 'leapjs';
+import plugins from 'leapjs-plugins';
+import { updatePlayerTransform, closeHand, openHand } from './World';
 
-Leap.loop({
+export const init = () => {
+  Leap.loop({
 
-  hand: (hand) => {
-    console.log(hand.screenPosition());
-  },
-}).use('screenPosition');
+    hand: (hand) => {
+      updatePlayerTransform(hand._rotation, hand.screenPosition());
+      if (hand.grabStrength > 0.5) closeHand();
+      else openHand();
+    },
+  })
+  .use('screenPosition');
+};
+
+export default {
+  init,
+};
