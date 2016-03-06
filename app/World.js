@@ -43,26 +43,29 @@ export const closeHand = player => {
 export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
   const current = gameObjects[player];
   current.mesh.rotation.set(pitch, -yaw, roll);
-  current.mesh.position.setX(handPos.x * 250);
-  current.mesh.position.setY(handPos.y * 200 - 100);
+  current.mesh.position.setX(handPos.x * 300);
+  current.mesh.position.setY(handPos.y * 300 - 150);
 };
 
 const checkGrab = (player) => {
   const ball = gameObjects.disk;
   const location = player.position;
-  const ballRad = ball.mesh.geometry.boundingSphere.radius;
-  const handRad = player.mesh.geometry.boundingSphere.radius;
+  const ballRad = 100;
+  const handRad = 300;
   const dX = ball.position.x - location.x;
   const dY = ball.position.y - location.y;
-  const dZ = ball.position.z - location.z;
+  if (Math.abs(ball.position.z - location.z) < ballRad) {
+    const between = (dX * dX) + (dY * dY);
 
-  const between = (dX * dX) + (dY * dY) + (dZ * dZ);
-  if (between <= ballRad + handRad) {
-    return true;
+    if (between <= ballRad * ballRad + handRad * handRad) {
+      console.log('gotem');
+      return true;
+    }
+    else {
+      return false;
+    }
   }
-  else {
-    return false;
-  }
+  else return false;
 };
 
 const checkBounds = ball => {
@@ -92,6 +95,9 @@ const ballMove = () => {
 const animate = () => {
   requestAnimationFrame(animate);
   ballMove();
+  if (!gameObjects.pOne.open) checkGrab(gameObjects.pOne);
+  if (!gameObjects.pTwo.open) checkGrab(gameObjects.pTwo);
+
   effect.render(scene, camera);
 };
 
