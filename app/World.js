@@ -5,27 +5,47 @@ let context = {};
 let camera = {};
 let renderer = {};
 let scene = {};
-let mesh = {};
+const mesh = {};
 
-const cubeGeo = new THREE.BoxGeometry(200, 200, 200);
-const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const gameObjects = {
+  disk: {},
+  pOne: {},
+  pTwo: {},
+};
+
+const torusGeo = new THREE.TorusGeometry(100, 4, 8, 8);
+const sphereGeo = new THREE.SphereGeometry(100, 10, 10);
+const basicMat = new THREE.MeshBasicMaterial({ color: 0x540D6E });
 
 const onWindowResize = () => {
-
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
+const updatePlayerTransform = (rotMat, handPos) => {
+  const data = {
+    rotation: rotMat,
+    position: handPos,
+  };
+};
+
+const updateGameObj = (key) => {
+  const current = gameObjects[key];
+};
+
 const animate = () => {
-
   requestAnimationFrame(animate);
-
-  mesh.rotation.x += 0.005;
-  mesh.rotation.y += 0.01;
-
   renderer.render(scene, camera);
+};
+
+const buildPlayer = (key) => {
+  const current = gameObjects[key];
+  current.mesh = new THREE.Mesh(torusGeo, basicMat);
+  current.position = { x: 100, y: 0, z: 0 };
+  scene.add(current.mesh);
+  current.mesh.translateX(current.position.x);
 };
 
 export const init = () => {
@@ -36,7 +56,7 @@ export const init = () => {
   camera.position.z = 400;
 
   scene = new THREE.Scene();
-  mesh = new THREE.Mesh(cubeGeo, basicMat);
+  gameObjects.disk = new THREE.Mesh(sphereGeo, basicMat);
   scene.add(mesh);
 
 
