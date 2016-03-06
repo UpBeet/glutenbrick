@@ -1,5 +1,6 @@
 import Leap from 'leapjs';
 import plugins from 'leapjs-plugins';
+import * as socket from './sockets';
 import { updatePlayerTransform, closeHand, openHand } from './World';
 
 export const init = () => {
@@ -11,15 +12,15 @@ export const init = () => {
       const x = (pos[0] / container.scrollWidth) * 2 - 1;
       const y = -(pos[1] / container.scrollHeight) * 2 + 1;
 
-      updatePlayerTransform(
-        'pOne',
-        hand.roll(),
-        hand.yaw(),
-        hand.pitch(),
-        { x, y });
-
-      if (hand.grabStrength > 0.2) closeHand('pOne');
-      else openHand('pOne');
+      socket.playerUpdate({
+        x,
+        y,
+        id: 'pOne',
+        roll: hand.roll(),
+        yaw: hand.yaw(),
+        pitch: hand.pitch(),
+        grabStrength: hand.grabStrength,
+      });
     },
   })
   .use('screenPosition');

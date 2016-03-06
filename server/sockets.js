@@ -10,8 +10,8 @@ let io;
 const join = ({ id }, s) => {
   const seat = addPlayer(s, id);
   s.emit('joined', { seat, id });
-  io.to(id).emit('player_joined', { seat });
-  s.join(id);
+  io.to('1').emit('player_joined', { seat });
+  s.join('1');
 };
 
 /**
@@ -32,11 +32,16 @@ const leave = () => {
   log.info('user disconnect \n');
 };
 
+const playerData = (data, s) => {
+  io.to(data.room).emit('playerUpdated', data);
+};
+
 
 const connect = (s) => {
   log.info('socket connected');
   s.on('host', () => host(s));
-  s.on('join', (data) => join(data, s));
+  s.on('join', data => join(data, s));
+  s.on('playerData', data => playerData(data, s));
   s.on('disconnect', leave);
 };
 
