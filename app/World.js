@@ -24,11 +24,23 @@ const onWindowResize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
-const updatePlayerTransform = (rotMat, handPos) => {
-  const data = {
-    rotation: rotMat,
-    position: handPos,
-  };
+export const openHand = player => {
+  if (!gameObjects[player].open) {
+    gameObjects[player].open = true;
+  }
+};
+
+export const closeHand = player => {
+  if (gameObjects[player].open) {
+    gameObjects[player].open = false;
+  }
+};
+
+export const updatePlayerTransform = (player, rotMat, handPos) => {
+  const current = gameObjects[name];
+  current.mesh.translateX(handPos.x);
+  current.mesh.translateY(handPos.y);
+  // current.mesh.matrix.multipy(rotMat);
 };
 
 const updateGameObj = (key) => {
@@ -46,6 +58,8 @@ const buildPlayer = (key) => {
   current.position = { x: 100, y: 0, z: 0 };
   scene.add(current.mesh);
   current.mesh.translateX(current.position.x);
+  current.mesh.translateY(current.position.y);
+  current.mesh.translateZ(current.position.z);
 };
 
 export const init = () => {
@@ -56,8 +70,9 @@ export const init = () => {
   camera.position.z = 400;
 
   scene = new THREE.Scene();
-  gameObjects.disk = new THREE.Mesh(sphereGeo, basicMat);
-  scene.add(mesh);
+  // gameObjects.disk = new THREE.Mesh(sphereGeo, basicMat);
+  // scene.add(mesh);
+  buildPlayer('pOne');
 
 
   // Renderer init
