@@ -16,8 +16,9 @@ const gameObjects = {
 };
 
 const torusGeo = new THREE.TorusGeometry(50, 20, 8, 8);
-const sphereGeo = new THREE.SphereGeometry(100, 10, 10);
+const sphereGeo = new THREE.SphereGeometry(50, 10, 10);
 const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const basicMat2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
 const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -32,7 +33,7 @@ const onWindowResize = () => {
 const buildPlayer = (key) => {
   const current = gameObjects[key];
   const material = new THREE.MeshBasicMaterial();
-  current.open = false;
+  current.open = true;
   if (key === 'pOne') {
     current.mesh = new THREE.Mesh(torusGeo, basicMat);
     current.position = { x: 0, y: 0, z: -400 };
@@ -51,7 +52,7 @@ const shootBall = player => {
   console.log('open');
   const vector = new THREE.Vector3(0, 0, 1);
   vector.applyQuaternion(player.mesh.quaternion);
-  vector.multiplyScalar(6);
+  vector.multiplyScalar(12);
   console.log(vector);
   gameObjects.disk.velocity = vector;
   // after release
@@ -90,7 +91,7 @@ export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
 // SECTION
 const buildBall = () => {
   const ball = gameObjects.disk;
-  ball.mesh = new THREE.Mesh(sphereGeo, basicMat);
+  ball.mesh = new THREE.Mesh(sphereGeo, basicMat2);
   ball.position = { x: 0, y: 0, z: 0 };
   ball.velocity = { x: 0, y: 0, z: 6 };
   scene.add(ball.mesh);
@@ -98,7 +99,7 @@ const buildBall = () => {
 };
 
 const checkBounds = ball => {
-  const range = 300;
+  const range = 350;
   if (ball.position.x >= range || ball.position.x < -range) {
     ball.velocity.x *= -1;
   }
@@ -135,8 +136,8 @@ const ballMove = () => {
 const checkGrab = (player) => {
   const ball = gameObjects.disk;
   const location = player.position;
-  const ballRad = 100;
-  const handRad = 100;
+  const ballRad = 50;
+  const handRad = 50;
   const dX = ball.position.x - location.x;
   const dY = ball.position.y - location.y;
   if (Math.abs(ball.position.z - location.z) < ballRad) {
@@ -159,7 +160,6 @@ const animate = () => {
     gameObjects.disk.currentOwner = gameObjects.pOne;
   }
   if (!gameObjects.pTwo.open && checkGrab(gameObjects.pTwo)) {
-    console.log('?');
     gameObjects.disk.held = true;
     gameObjects.disk.currentOwner = gameObjects.pTwo;
   }
