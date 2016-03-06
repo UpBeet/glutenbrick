@@ -8,6 +8,7 @@ let renderer;
 let scene;
 let effect;
 let ghost;
+let aiState = 'waiting';
 
 const gameObjects = {
   disk: {},
@@ -54,6 +55,9 @@ const buildPlayer = (key) => {
 };
 
 const shootBall = player => {
+  if (player === 'pOne') {
+    aiState = 'catching';
+  }
 
   const vector = new THREE.Vector3(0, 0, 1);
   vector.applyQuaternion(player.mesh.quaternion);
@@ -82,6 +86,26 @@ export const closeHand = player => {
   }
 };
 
+const checkGrab = (player) => {
+  const ball = gameObjects.disk;
+  const location = player.position;
+  const ballRad = 50;
+  const handRad = 50;
+  const dX = ball.position.x - location.x;
+  const dY = ball.position.y - location.y;
+  if (Math.abs(ball.position.z - location.z) < ballRad) {
+    const between = (dX * dX) + (dY * dY);
+
+    if (between <= ballRad * ballRad + handRad * handRad) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  else return false;
+};
+
 export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
   const current = gameObjects[player];
   current.mesh.rotation.set(pitch, -yaw, roll);
@@ -98,14 +122,8 @@ const resetBall = () => {
 
 const scorePoint = position => {
   resetBall();
-  if (position > 0) {
-    gameObjects.pOne.score++;
-    gameObjects.disk.velocity = { x: 0, y: 0, z: -4 };
-  }
-  else {
-    gameObjects.pTwo.score++;
-    gameObjects.disk.velocity = { x: 0, y: 0, z: 4 };
-  }
+  gameObjects.pOne.score++;
+  gameObjects.disk.velocity = { x: 0, y: 0, z: -4 };
 };
 
 // SECTION
@@ -128,8 +146,17 @@ const checkBounds = ball => {
   if (ball.position.y >= (range - 110) || ball.position.y < -(range - 110)) {
     ball.velocity.y *= -1;
   }
-  if (ball.position.z >= range || ball.position.z < -range) {
+  if (ball.position.z < -range) {
     scorePoint(ball.position.z);
+  }
+  if (ball.position.z >= range) {
+    // check if hit Targets
+    if (checkGrab(gameObjects.pTwo)) {
+      scorePoint();
+    }
+    else {
+      ball.velocity.z *= -1;
+    }
   }
 };
 
@@ -159,26 +186,6 @@ const ballMove = () => {
       ball.mesh.position.setZ(-300);
     }
   }
-};
-
-const checkGrab = (player) => {
-  const ball = gameObjects.disk;
-  const location = player.position;
-  const ballRad = 50;
-  const handRad = 50;
-  const dX = ball.position.x - location.x;
-  const dY = ball.position.y - location.y;
-  if (Math.abs(ball.position.z - location.z) < ballRad) {
-    const between = (dX * dX) + (dY * dY);
-
-    if (between <= ballRad * ballRad + handRad * handRad) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  else return false;
 };
 
 const animate = () => {
