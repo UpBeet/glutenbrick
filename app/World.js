@@ -135,7 +135,7 @@ const checkBounds = ball => {
 
 const ballMove = () => {
   const ball = gameObjects.disk;
-  console.log(!ball.held);
+
   if (!ball.held) {
     ball.mesh.translateX(ball.velocity.x);
     ball.mesh.translateY(ball.velocity.y);
@@ -148,10 +148,16 @@ const ballMove = () => {
   else {
     ball.mesh.position.setX(ball.currentOwner.position.x);
     ball.mesh.position.setY(ball.currentOwner.position.y);
-    ball.mesh.position.setZ(-300);
     ball.position.x = ball.currentOwner.position.x;
     ball.position.y = ball.currentOwner.position.y;
-    ball.position.z = -300;
+    if (ball.currentOwner.position.z > 0) {
+      ball.position.z = 300;
+      ball.mesh.position.setZ(300);
+    }
+    else {
+      ball.position.z = -300;
+      ball.mesh.position.setZ(-300);
+    }
   }
 };
 
