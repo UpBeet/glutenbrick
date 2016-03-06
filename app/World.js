@@ -37,10 +37,17 @@ export const closeHand = player => {
 };
 
 export const updatePlayerTransform = (player, rotMat, handPos) => {
+<<<<<<< HEAD
   const current = gameObjects[name];
   current.mesh.translateX(handPos.x);
   current.mesh.translateY(handPos.y);
   // current.mesh.matrix.multipy(rotMat);
+=======
+  const data = {
+    rotation: rotMat,
+    position: handPos,
+  };
+>>>>>>> 7982e5e6fd8a182d8f9032176b037fa3459cd3ac
 };
 
 const updateGameObj = (key) => {
@@ -70,10 +77,10 @@ export const init = () => {
   camera.position.z = 400;
 
   scene = new THREE.Scene();
+
+  buildPlayer('pOne');
   // gameObjects.disk = new THREE.Mesh(sphereGeo, basicMat);
   // scene.add(mesh);
-  buildPlayer('pOne');
-
 
   // Renderer init
   renderer = new THREE.WebGLRenderer();
