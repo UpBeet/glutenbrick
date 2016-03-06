@@ -2,5 +2,7 @@ console.log(':P');
 
 import * as socket from './sockets';
 
-socket.connect(window.location.origin);
+const host = process.env.HOST_URL || 'localhost:8220';
+
+socket.connect(host);
 socket.host();
