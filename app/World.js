@@ -1,10 +1,14 @@
 import THREE from 'three';
+import Pepper from '../lib/pepper';
 
 // Three js constants
 let context = {};
 let camera = {};
-let renderer = {};
-let scene = {};
+let renderer;
+let scene;
+let effect;
+let ghost;
+
 const mesh = {};
 
 const gameObjects = {
@@ -21,7 +25,7 @@ const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  effect.setSize(window.innerWidth, window.innerHeight);
 };
 
 export const openHand = player => {
@@ -51,7 +55,7 @@ const updateGameObj = (key) => {
 
 const animate = () => {
   requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+  effect.render(scene, camera);
 };
 
 const buildPlayer = (key) => {
@@ -69,18 +73,20 @@ export const init = () => {
   context = document.querySelector('#renderer');
 
   camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-  camera.position.z = 400;
+  // camera.position.z = 400;
 
   scene = new THREE.Scene();
 
   buildPlayer('pOne');
-  // gameObjects.disk = new THREE.Mesh(sphereGeo, basicMat);
-  // scene.add(mesh);
 
   // Renderer init
   renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
   context.appendChild(renderer.domElement);
+
+  ghost = new THREE.PeppersGhostEffect(renderer);
+  effect = ghost;
+  effect.setSize(window.innerWidth, window.innerHeight);
+  effect.cameraDistance = 400;
 
   window.addEventListener('resize', onWindowResize, false);
   animate();
