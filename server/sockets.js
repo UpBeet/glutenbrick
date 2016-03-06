@@ -2,6 +2,7 @@ import log from 'winston';
 import http from 'http';
 import Socketio from 'socket.io';
 import { createMatch, addPlayer } from './match';
+const port = process.env.PORT || 8220;
 let io;
 
 /**

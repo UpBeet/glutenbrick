@@ -7,7 +7,7 @@ let socket;
 export const addHandlers = handlers => handlers.map(h => socket.on(h[0], h[1]));
 
 export const connect = host => {
-  socket = io(host);
+  socket = io.connect('http://glutendisk.herokuapp.com/:8220');
   addHandlers(handlers.matchmaking);
   init(); // World
   Leap.init();
