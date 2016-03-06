@@ -24,7 +24,7 @@ export const connect = host => {
 
   socket.on('playerUpdated', ({ player }) => {
     updatePlayerTransform(
-      player.id,
+      'pOne',
       player.roll,
       player.yaw,
       player.pitch,
