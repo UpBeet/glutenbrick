@@ -91,9 +91,14 @@ const animate = () => {
 const buildPlayer = (key) => {
   const current = gameObjects[key];
   const material = new THREE.MeshBasicMaterial();
-  current.mesh = new THREE.Mesh(torusGeo, material);
-  if (key === 'pOne') current.position = { x: 100, y: 0, z: 0 };
-  if (key === 'pTwo') current.position = { x: 100, y: 0, z: 100 };
+  if (key === 'pOne') {
+    current.mesh = new THREE.Mesh(torusGeo, basicMat);
+    current.position = { x: 0, y: 0, z: -100 };
+  }
+  if (key === 'pTwo') {
+    current.mesh = new THREE.Mesh(torusGeo, material);
+    current.position = { x: 0, y: 0, z: 100 };
+  }
   scene.add(current.mesh);
   current.mesh.translateX(current.position.x);
   current.mesh.translateY(current.position.y);
