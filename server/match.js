@@ -16,12 +16,12 @@ export const createMatch = () => {
   return match;
 };
 
-export const addPlayer = (id, socket) => {
+export const addPlayer = (socket, id) => {
   const match = getMatch(id);
 
   if (match.players.length >= 2) {
     // no open seats
-    return undefined;
+    return -1;
   }
 
   const seat = match.players.length;

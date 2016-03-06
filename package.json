@@ -34,6 +34,7 @@
     "socket.io": "^1.4.5",
     "three": "^0.74.0",
     "three.js": "^0.73.2",
+    "socket.io-client": "^1.4.5",
     "webpack": "^1.12.14",
     "winston": "^2.2.0"
   }
