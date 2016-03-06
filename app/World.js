@@ -108,7 +108,7 @@ const checkGrab = (player) => {
 
 export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
   const current = gameObjects[player];
-  current.mesh.rotation.set(pitch, -yaw, roll);
+  current.mesh.rotation.set(-pitch, yaw, roll);
   current.mesh.position.setX(handPos.x * 300);
   current.mesh.position.setY(handPos.y * 300 - 150);
   current.position.x = handPos.x * 300;
