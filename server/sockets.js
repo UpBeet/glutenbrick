@@ -48,7 +48,7 @@ const connect = (s) => {
 
 export const Sockets = app => {
   const httpServer = http.Server(app);
-  httpServer.listen(8220);
-  io = Socketio(httpServer);
+  httpServer.listen(port);
+  io = Socketio.listen(httpServer, { origins: '*:*' });
   io.on('connection', connect);
 };
