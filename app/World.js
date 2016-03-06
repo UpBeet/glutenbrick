@@ -29,12 +29,14 @@ const onWindowResize = () => {
 export const openHand = player => {
   if (!gameObjects[player].open) {
     gameObjects[player].open = true;
+    gameObjects[player].mesh.scale.set(1, 1, 1);
   }
 };
 
 export const closeHand = player => {
   if (gameObjects[player].open) {
     gameObjects[player].open = false;
+    gameObjects[player].mesh.scale.set(0.4, 0.4, 0.4);
   }
 };
 
@@ -64,12 +66,15 @@ const checkGrab = (player) => {
 };
 
 const checkBounds = ball => {
-  const range = 200;
+  const range = 300;
   if (ball.position.x >= range || ball.position.x < -range) {
     ball.velocity.x *= -1;
   }
-  else if (ball.position.y >= range || ball.position.y < -range) {
+  if (ball.position.y >= range || ball.position.y < -range) {
     ball.velocity.y *= -1;
+  }
+  if (ball.position.z >= range || ball.position.z < -range) {
+    ball.velocity.z *= -1;
   }
 };
 
@@ -77,14 +82,16 @@ const ballMove = () => {
   const ball = gameObjects.disk;
   ball.mesh.translateX(ball.velocity.x);
   ball.mesh.translateY(ball.velocity.y);
+  ball.mesh.translateZ(ball.velocity.z);
   ball.position.x += ball.velocity.x;
   ball.position.y += ball.velocity.y;
+  ball.position.z += ball.velocity.z;
   checkBounds(ball);
 };
 
 const animate = () => {
   requestAnimationFrame(animate);
-  // ballMove();
+  ballMove();
   effect.render(scene, camera);
 };
 
@@ -93,11 +100,11 @@ const buildPlayer = (key) => {
   const material = new THREE.MeshBasicMaterial();
   if (key === 'pOne') {
     current.mesh = new THREE.Mesh(torusGeo, basicMat);
-    current.position = { x: 0, y: 0, z: -100 };
+    current.position = { x: 0, y: 0, z: -400 };
   }
   if (key === 'pTwo') {
     current.mesh = new THREE.Mesh(torusGeo, material);
-    current.position = { x: 0, y: 0, z: 100 };
+    current.position = { x: 0, y: 0, z: 400 };
   }
   scene.add(current.mesh);
   current.mesh.translateX(current.position.x);
@@ -109,7 +116,7 @@ const buildBall = () => {
   const ball = gameObjects.disk;
   ball.mesh = new THREE.Mesh(sphereGeo, basicMat);
   ball.position = { x: 0, y: 0, z: 0 };
-  ball.velocity = { x: 15, y: 8 };
+  ball.velocity = { x: 2, y: -3, z: 3 };
   scene.add(ball.mesh);
 };
 
@@ -122,7 +129,7 @@ export const init = () => {
   scene = new THREE.Scene();
   buildPlayer('pOne');
   buildPlayer('pTwo');
-  // buildBall();
+  buildBall();
 
   // Renderer init
   renderer = new THREE.WebGLRenderer();
@@ -131,7 +138,7 @@ export const init = () => {
   ghost = new THREE.PeppersGhostEffect(renderer);
   effect = ghost;
   effect.setSize(window.innerWidth, window.innerHeight);
-  effect.cameraDistance = 400;
+  effect.cameraDistance = 1000;
 
   window.addEventListener('resize', onWindowResize, false);
   animate();
