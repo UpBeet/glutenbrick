@@ -39,6 +39,7 @@ export const closeHand = player => {
 export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
   const current = gameObjects[player];
   current.mesh.rotation.set(pitch, -yaw, roll);
+  
 };
 
 const updateGameObj = (key) => {
