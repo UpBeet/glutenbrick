@@ -1,4 +1,4 @@
-import io from 'socket.io';
+import io from 'socket.io-client';
 import handlers from './handlers';
 let socket;
 
