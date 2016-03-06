@@ -15,10 +15,14 @@ const gameObjects = {
   pTwo: {},
 };
 
+let tracker = {};
+
 const torusGeo = new THREE.TorusGeometry(50, 20, 8, 8);
 const sphereGeo = new THREE.SphereGeometry(50, 10, 10);
+const trackerGeo = new THREE.CubeGeometry(500, 500, 2);
 const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const basicMat2 = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const basicMat3 = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.2 });
 
 const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -100,10 +104,10 @@ const buildBall = () => {
 
 const checkBounds = ball => {
   const range = 350;
-  if (ball.position.x >= range || ball.position.x < -range) {
+  if (ball.position.x >= (range - 100) || ball.position.x < -(range - 100)) {
     ball.velocity.x *= -1;
   }
-  if (ball.position.y >= range || ball.position.y < -range) {
+  if (ball.position.y >= (range - 100) || ball.position.y < -(range - 100)) {
     ball.velocity.y *= -1;
   }
   if (ball.position.z >= range || ball.position.z < -range) {
@@ -164,7 +168,7 @@ const animate = () => {
     gameObjects.disk.currentOwner = gameObjects.pTwo;
   }
   ballMove();
-
+  tracker.position.setZ(gameObjects.disk.position.z);
   effect.render(scene, camera);
 };
 
@@ -179,6 +183,8 @@ export const init = () => {
   buildPlayer('pTwo');
   buildBall();
 
+  tracker = new THREE.Mesh(trackerGeo, basicMat3);
+  scene.add(tracker);
   // Renderer init
   renderer = new THREE.WebGLRenderer();
   context.appendChild(renderer.domElement);
