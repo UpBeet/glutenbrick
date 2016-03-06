@@ -50,7 +50,7 @@ const connect = (s) => {
 
 export const Sockets = app => {
   const httpServer = http.Server(app);
-  httpServer.listen(8220);
+  httpServer.listen(port);
   io = Socketio(httpServer, { origins: '*:*' });
   io.on('connection', connect);
 };
