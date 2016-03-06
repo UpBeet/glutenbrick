@@ -15,7 +15,7 @@ const gameObjects = {
   pTwo: {},
 };
 
-const torusGeo = new THREE.TorusGeometry(100, 20, 8, 8);
+const torusGeo = new THREE.TorusGeometry(50, 20, 8, 8);
 const sphereGeo = new THREE.SphereGeometry(100, 10, 10);
 const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
@@ -56,7 +56,7 @@ const checkGrab = (player) => {
 
   const between = (dX * dX) + (dY * dY) + (dZ * dZ);
   if (between <= ballRad + handRad) {
-    return true
+    return true;
   }
   else {
     return false;
@@ -84,14 +84,16 @@ const ballMove = () => {
 
 const animate = () => {
   requestAnimationFrame(animate);
-  ballMove();
+  // ballMove();
   effect.render(scene, camera);
 };
 
 const buildPlayer = (key) => {
   const current = gameObjects[key];
-  current.mesh = new THREE.Mesh(torusGeo, basicMat);
-  current.position = { x: 100, y: 0, z: 0 };
+  const material = new THREE.MeshBasicMaterial();
+  current.mesh = new THREE.Mesh(torusGeo, material);
+  if (key === 'pOne') current.position = { x: 100, y: 0, z: 0 };
+  if (key === 'pTwo') current.position = { x: 100, y: 0, z: 100 };
   scene.add(current.mesh);
   current.mesh.translateX(current.position.x);
   current.mesh.translateY(current.position.y);
@@ -114,8 +116,8 @@ export const init = () => {
 
   scene = new THREE.Scene();
   buildPlayer('pOne');
-  // buildPlayer('pTwo');
-  buildBall();
+  buildPlayer('pTwo');
+  // buildBall();
 
   // Renderer init
   renderer = new THREE.WebGLRenderer();
