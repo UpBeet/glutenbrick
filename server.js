@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import Sockets from './server/sockets.js';
+import { Sockets } from './server/sockets.js';
 
 const port = process.env.PORT || 8222;
 const app = express();
