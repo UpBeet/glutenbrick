@@ -3,8 +3,18 @@ import handlers from './handlers';
 import Leap from './LeapController';
 import { init, updatePlayerTransform, closeHand, openHand } from './World';
 let socket;
+let playerId;
 
 export const addHandlers = handlers => handlers.map(h => socket.on(h[0], h[1]));
+
+export const setSeat = seat => {
+  if (seat === 0) {
+    playerId = 'pOne';
+  }
+  else {
+    playerId = 'pTwo';
+  }
+};
 
 export const connect = host => {
   socket = io.connect(host);
@@ -29,5 +39,6 @@ export const host = () => socket.emit('host');
 export const join = id => socket.emit('join', { id });
 
 export const playerUpdate = player => {
+  player.id = playerId;
   socket.emit('playerData', { room: '1', player });
 };
