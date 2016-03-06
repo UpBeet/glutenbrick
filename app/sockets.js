@@ -30,8 +30,8 @@ export const connect = host => {
       player.pitch,
       { x: player.x, y: player.y });
 
-    if (player.grabStrength > 0.2) closeHand(player.id);
-    else openHand(player.id);
+    if (player.grabStrength > 0.2) closeHand('pOne');
+    else openHand('pOne');
   });
 };
 
