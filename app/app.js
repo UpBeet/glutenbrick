@@ -1,1 +1,5 @@
-console.log('entry point');
+import World from './World';
+
+console.log(':P');
+
+World.init();
