@@ -18,7 +18,7 @@ export const init = () => {
         hand.pitch(),
         { x, y });
 
-      if (hand.grabStrength > 0.5) closeHand('pOne');
+      if (hand.grabStrength > 0.2) closeHand('pOne');
       else openHand('pOne');
     },
   })

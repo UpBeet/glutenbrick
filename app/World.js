@@ -13,7 +13,7 @@ const gameObjects = {
   pTwo: {},
 };
 
-const torusGeo = new THREE.TorusGeometry(100, 20, 8, 8);
+const torusGeo = new THREE.TorusGeometry(90, 40, 8, 8);
 const sphereGeo = new THREE.SphereGeometry(100, 10, 10);
 const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
@@ -27,12 +27,14 @@ const onWindowResize = () => {
 export const openHand = player => {
   if (!gameObjects[player].open) {
     gameObjects[player].open = true;
+    gameObjects[player].mesh.scale.set(1, 1, 1);
   }
 };
 
 export const closeHand = player => {
   if (gameObjects[player].open) {
     gameObjects[player].open = false;
+    gameObjects[player].mesh.scale.set(0.4, 0.4, 0.4);
   }
 };
 
