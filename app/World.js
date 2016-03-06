@@ -24,7 +24,19 @@ const onWindowResize = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 };
 
-const updatePlayerTransform = (rotMat, handPos) => {
+export const openHand = player => {
+  if (!gameObjects[player].open) {
+    gameObjects[player].open = true;
+  }
+};
+
+export const closeHand = player => {
+  if (gameObjects[player].open) {
+    gameObjects[player].open = false;
+  }
+};
+
+export const updatePlayerTransform = (player, rotMat, handPos) => {
   const data = {
     rotation: rotMat,
     position: handPos,
