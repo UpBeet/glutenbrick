@@ -86,7 +86,7 @@ export const init = () => {
   ghost = new THREE.PeppersGhostEffect(renderer);
   effect = ghost;
   effect.setSize(window.innerWidth, window.innerHeight);
-  effect.cameraDistance = 400;
+  effect.cameraDistance = 800;
 
   window.addEventListener('resize', onWindowResize, false);
   animate();
