@@ -6,7 +6,13 @@ export const init = () => {
   Leap.loop({
 
     hand: (hand) => {
-      updatePlayerTransform('pOne', hand._rotation, hand.screenPosition());
+      updatePlayerTransform(
+        'pOne',
+        hand.roll(),
+        hand.yaw(),
+        hand.pitch(),
+        hand.screenPosition());
+
       if (hand.grabStrength > 0.5) closeHand('pOne');
       else openHand('pOne');
     },

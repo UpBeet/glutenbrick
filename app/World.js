@@ -13,9 +13,9 @@ const gameObjects = {
   pTwo: {},
 };
 
-const torusGeo = new THREE.TorusGeometry(100, 4, 8, 8);
+const torusGeo = new THREE.TorusGeometry(100, 20, 8, 8);
 const sphereGeo = new THREE.SphereGeometry(100, 10, 10);
-const basicMat = new THREE.MeshBasicMaterial({ color: 0x540D6E });
+const basicMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
 const onWindowResize = () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -36,18 +36,9 @@ export const closeHand = player => {
   }
 };
 
-export const updatePlayerTransform = (player, rotMat, handPos) => {
-<<<<<<< HEAD
-  const current = gameObjects[name];
-  current.mesh.translateX(handPos.x);
-  current.mesh.translateY(handPos.y);
-  // current.mesh.matrix.multipy(rotMat);
-=======
-  const data = {
-    rotation: rotMat,
-    position: handPos,
-  };
->>>>>>> 7982e5e6fd8a182d8f9032176b037fa3459cd3ac
+export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
+  const current = gameObjects[player];
+  current.mesh.rotation.set(pitch, -yaw, roll);
 };
 
 const updateGameObj = (key) => {
