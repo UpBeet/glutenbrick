@@ -48,8 +48,7 @@ const connect = (s) => {
   s.on('disconnect', leave);
 };
 
-export const Sockets = app => {
-  const server = http.Server(app);
-  io = Socketio(server, { origins: '*:*' });
+export const Sockets = IO => {
+  io = IO;
   io.on('connection', connect);
 };
