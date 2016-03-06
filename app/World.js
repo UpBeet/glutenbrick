@@ -46,6 +46,7 @@ const buildPlayer = (key) => {
     current.mesh = new THREE.Mesh(torusGeo, material);
     current.position = { x: 0, y: 0, z: 400 };
   }
+  current.score = 0;
   scene.add(current.mesh);
   current.mesh.translateX(current.position.x);
   current.mesh.translateY(current.position.y);
@@ -53,11 +54,11 @@ const buildPlayer = (key) => {
 };
 
 const shootBall = player => {
-  console.log('open');
+
   const vector = new THREE.Vector3(0, 0, 1);
   vector.applyQuaternion(player.mesh.quaternion);
-  vector.multiplyScalar(12);
-  console.log(vector);
+  vector.multiplyScalar(8);
+
   gameObjects.disk.velocity = vector;
   // after release
   gameObjects.disk.held = false;
@@ -90,6 +91,23 @@ export const updatePlayerTransform = (player, roll, yaw, pitch, handPos) => {
   current.position.y = handPos.y * 300 - 150;
 };
 
+const resetBall = () => {
+  gameObjects.disk.position = { x: 0, y: 0, z: 0 };
+  gameObjects.disk.mesh.position.set(0, 0, 0);
+};
+
+const scorePoint = position => {
+  resetBall();
+  if (position > 0) {
+    gameObjects.pOne.score++;
+    gameObjects.disk.velocity = { x: 0, y: 0, z: -4 };
+  }
+  else {
+    gameObjects.pTwo.score++;
+    gameObjects.disk.velocity = { x: 0, y: 0, z: 4 };
+  }
+};
+
 // SECTION
 // BALL
 // SECTION
@@ -97,21 +115,21 @@ const buildBall = () => {
   const ball = gameObjects.disk;
   ball.mesh = new THREE.Mesh(sphereGeo, basicMat2);
   ball.position = { x: 0, y: 0, z: 0 };
-  ball.velocity = { x: 0, y: 0, z: 6 };
+  ball.velocity = { x: 0, y: 0, z: -4 };
   scene.add(ball.mesh);
   ball.held = false;
 };
 
 const checkBounds = ball => {
-  const range = 350;
-  if (ball.position.x >= (range - 100) || ball.position.x < -(range - 100)) {
+  const range = 360;
+  if (ball.position.x >= (range - 110) || ball.position.x < -(range - 110)) {
     ball.velocity.x *= -1;
   }
-  if (ball.position.y >= (range - 100) || ball.position.y < -(range - 100)) {
+  if (ball.position.y >= (range - 110) || ball.position.y < -(range - 110)) {
     ball.velocity.y *= -1;
   }
   if (ball.position.z >= range || ball.position.z < -range) {
-    ball.velocity.z *= -1;
+    scorePoint(ball.position.z);
   }
 };
 
